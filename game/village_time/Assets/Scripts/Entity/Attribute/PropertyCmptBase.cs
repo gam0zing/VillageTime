@@ -47,7 +47,7 @@ public abstract class PropertyCmptBase : AbstractAttribute {
         base.AddModifier(modifier);
     }
     protected override void Refresh() {
-        this._current = this._first.GetModified(this._base);
+        this._current = this.GetModified();
     }
     protected virtual void OnBaseChange(float origin, float now) { }
     protected virtual void OnMaxChange(float origin, float now) { }

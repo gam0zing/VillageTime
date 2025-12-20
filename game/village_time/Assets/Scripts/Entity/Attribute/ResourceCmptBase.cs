@@ -49,7 +49,7 @@ public abstract class ResourceCmptBase : AbstractAttribute {
         base.AddModifier(modifier);
     }
     protected override void Refresh() {
-        this._max = this._first.GetModified(this._base);
+        this._max = this.GetModified();
     }
     protected virtual void OnBaseChange(float origin, float now) { }
     protected virtual void OnCurrentChange(float origin, float now) { }

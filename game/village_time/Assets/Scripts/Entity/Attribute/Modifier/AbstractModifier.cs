@@ -17,4 +17,13 @@ public abstract class AbstractModifier : IModifier {
         this._next = next;
     }
     public abstract float GetModified(float value);
+
+    public void SetLast(IModifier modifier) {
+    }
+
+    public void SetNext(IModifier modifier) {
+    }
+
+    public void Banding(IModifier first, IModifier final) {
+    }
 }
