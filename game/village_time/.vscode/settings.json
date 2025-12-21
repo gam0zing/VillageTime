@@ -56,5 +56,8 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "village_time.sln"
+    "dotnet.defaultSolution": "village_time.sln",
+    "cSpell.words": [
+        "Mathf"
+    ]
 }

@@ -1,0 +1,10 @@
+[*]
+vsspell_code_analyzer_ignore_xml_doc_comments = true
+vsspell_code_analyzer_ignore_delimited_comments = true
+vsspell_code_analyzer_ignore_standard_single_line_comments = true
+vsspell_code_analyzer_ignore_quadruple_slash_comments = true
+vsspell_code_analyzer_ignore_normal_strings = true
+vsspell_code_analyzer_ignore_verbatim_strings = true
+vsspell_code_analyzer_ignore_interpolated_strings = true
+vsspell_code_analyzer_ignore_raw_strings = true
+

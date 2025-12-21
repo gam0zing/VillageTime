@@ -1,7 +1,6 @@
 ﻿
 using UnityEngine;
 
-public class EntityCmpt : MonoBehaviour
-{
-
+public class EntityCmpt : MonoBehaviour {
+    
 }
