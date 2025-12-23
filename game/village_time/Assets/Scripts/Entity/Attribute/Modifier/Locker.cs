@@ -10,13 +10,21 @@ public class Locker : Modifier {
     }
     public void SetStrength(float value) {
         this._strength = value;
-        this.onChange?.Invoke();
+        if (this.onChange == null) {
+            Debug.LogWarning("属性系统：无法触发修改回调，回调对象为null");
+            return;
+        }
+        this.onChange.Invoke();
     }
     public bool IsTwoWay() {
         return this._isTwoWay;
     }
     public void SetTwoWay(bool value) {
         this._isTwoWay = value;
-        this.onChange?.Invoke();
+        if (this.onChange == null) {
+            Debug.LogWarning("属性系统：无法触发修改回调，回调对象为null");
+            return;
+        }
+        this.onChange.Invoke();
     }
 }

@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(EntityCmpt))]
 public abstract class AbstractAttribute : MonoBehaviour, IAttribute {
     private List<IModifyHandler<IModifier>> _handlers;
     public float Base { get; set; } = 0F;
-
     public float Value => this._value;
     private float _value = 0;
 

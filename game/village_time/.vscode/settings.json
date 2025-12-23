@@ -58,6 +58,8 @@
     },
     "dotnet.defaultSolution": "village_time.sln",
     "cSpell.words": [
+        "Behaviour",
+        "Cmpt",
         "Mathf"
     ]
 }
