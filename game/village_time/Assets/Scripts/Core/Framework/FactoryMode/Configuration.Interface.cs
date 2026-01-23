@@ -9,13 +9,14 @@ using System;
 
 /// <summary>
 /// 最基本的工厂配置接口，所有的配置接口都继承它，作为形式上的统一。
-/// 不要用这个接口作为Assets的配置字段类型，这样做没有任何意义。
+/// 不要使用这个接口作为多态序列化的起点类型
 /// </summary>
-public interface IFactoryCfg { }
+public interface IFactoryConfiguration {
 
-public interface IBlockFactoryCfg : IFactoryCfg {
-    
 }
-public interface IItemFactoryCfg : IFactoryCfg {
+public interface IItemConfiguration : IFactoryConfiguration {
+
+}
+public interface IBlockConfiguration : IFactoryConfiguration {
 
 }
