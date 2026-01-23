@@ -1,7 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "自定义/注册表资产")]
-public class RegistryAsset : ScriptableObject {
+public abstract class RegistryAsset<T> : ScriptableObject where T : IFactoryCfg {
     [SerializeReference, SerializePolymorphism]
-    public IFactoryCfg configuration;
+    public T configuration;
 }

@@ -10,23 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Prefab_Entity
+  m_Name: Registry
   m_EditorClassIdentifier: 
-  m_GroupName: Prefab_Entity
+  m_GroupName: Packed Assets
   m_Data:
     m_SerializedData: []
-  m_GUID: 55826cfe11dd52b4fa3ce0e01c522810
+  m_GUID: db8eeee9a60bc5a4f9df0e7fb9b828f0
   m_SerializeEntries:
-  - m_GUID: 303b8f4548268ee429cc81157a673e09
-    m_Address: Prefab.Entity.Base
+  - m_GUID: 19703c7565a87e44ba5410848e6887d0
+    m_Address: Assets/AddressableAssets/Registry/Block/example_block.asset
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - entity
-    - prefab
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4fae79529510ab840ac6d3e322a9e867
+    m_Address: Assets/AddressableAssets/Registry/Item/example_item.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 10a259d4af42e844d8989047398b7bb0, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 5486ccadd842eec4cbc55a5666cb92cf, type: 2}
-    - {fileID: 11400000, guid: d10182d2934f68c47809e12e6802ff0a, type: 2}
+    - {fileID: 11400000, guid: a9c2608f0d6edc24dbd739ff190bfbff, type: 2}
+    - {fileID: 11400000, guid: ba3f50a008470754e89c049ef686d7a8, type: 2}

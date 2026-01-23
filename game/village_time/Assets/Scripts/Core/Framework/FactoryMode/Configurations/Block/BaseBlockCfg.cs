@@ -2,8 +2,7 @@ using System;
 using UnityEngine.Scripting;
 
 [Serializable]
-[Preserve]
-public class BlockBaseData : IFactoryCfg {
+public class BaseBlockCfg : IBlockFactoryCfg {
     public ushort hight = 1;
     public ushort width = 1;
 }
