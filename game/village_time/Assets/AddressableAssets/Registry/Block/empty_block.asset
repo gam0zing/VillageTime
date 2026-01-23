@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17641ae4ae4988b409527a7f117553c5, type: 3}
+  m_Name: empty_block
+  m_EditorClassIdentifier: 
+  configuration:
+    rid: 9088009498839220228
+  references:
+    version: 2
+    RefIds:
+    - rid: 9088009498839220228
+      type: {class: BaseBlockConfiguration, ns: , asm: Assembly-CSharp}
+      data:
+        nameLang:
+          _key: block_empty_name
+          _value: "\u7A7A\u65B9\u5757"
+        descriptionLang:
+          _key: block_empty_description
+          _value: "Debug\u4E13\u7528\uFF0C\u4F60\u4E0D\u4F1A\u5728\u6B63\u5E38\u6E38\u620F\u4E2D\u770B\u5230\u5B83"
+        height: 1
+        width: 1
+        passable: 0

@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "×Ô¶¨Òå/×¢²á±í×Ê²ú/ÎïÆ·")]
+[CreateAssetMenu(menuName = "è‡ªå®šä¹‰/æ³¨å†Œè¡¨èµ„äº§/ç‰©å“")]
 public class ItemRegistryAsset : RegistryAsset<IItemConfiguration> {
 
 }
