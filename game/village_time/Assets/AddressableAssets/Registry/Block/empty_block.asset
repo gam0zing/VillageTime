@@ -20,6 +20,8 @@ MonoBehaviour:
     - rid: 9088009498839220228
       type: {class: BaseBlockConfiguration, ns: , asm: Assembly-CSharp}
       data:
+        factory:
+          rid: 9088009509977980928
         nameLang:
           _key: block_empty_name
           _value: "\u7A7A\u65B9\u5757"
@@ -29,3 +31,6 @@ MonoBehaviour:
         height: 1
         width: 1
         passable: 0
+    - rid: 9088009509977980928
+      type: {class: BaseBlockFactory, ns: , asm: Assembly-CSharp}
+      data: 

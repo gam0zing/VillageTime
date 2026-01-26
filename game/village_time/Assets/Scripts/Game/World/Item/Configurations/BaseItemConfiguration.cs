@@ -3,6 +3,9 @@ using UnityEngine;
 
 [Serializable]
 public class BaseItemConfiguration : IItemConfiguration {
+    [Header("---------- 基本 ----------")]
+    [SerializeReference, SerializePolymorphism]
+    public BaseItemFactory factory;
 
     [Header("显示")]
     [Translation]

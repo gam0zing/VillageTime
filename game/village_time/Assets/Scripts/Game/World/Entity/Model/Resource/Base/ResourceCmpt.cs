@@ -18,6 +18,12 @@ public abstract class ResourceCmpt : MonoBehaviour, IResource {
     public float GetMin() {
         return this._min != null ? this._min.Value : ResourceCmpt.DEFAULT_MIN;
     }
+    public void SetMax(IAttribute attribute) {
+        this._max = attribute;
+    }
+    public void SetMin(IAttribute attribute) {
+        this._min = attribute;
+    }
     public void Change(float value) {
         this._value = Mathf.Clamp(value, this.GetMin(), this.GetMax());
     }

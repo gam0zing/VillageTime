@@ -3,6 +3,9 @@ using UnityEngine;
 
 [Serializable]
 public class BaseBlockConfiguration : IBlockConfiguration {
+    [Header("---------- 基本 ----------")]
+    [SerializeReference, SerializePolymorphism]
+    public BaseBlockFactory factory;
 
     [Header("---------- 显示 ----------")]
     [Translation]
@@ -19,4 +22,6 @@ public class BaseBlockConfiguration : IBlockConfiguration {
     [Header("---------- 交互 ----------")]
     [Tooltip("用来判断该方块是否启用碰撞体")]
     public bool passable = false;
+
+
 }
