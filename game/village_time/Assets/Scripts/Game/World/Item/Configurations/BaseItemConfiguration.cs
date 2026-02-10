@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class BaseItemConfiguration : IItemConfiguration {
+public class BaseItemConfiguration : FactoryConfiguration {
     [Header("---------- 基本 ----------")]
     [SerializeReference, SerializePolymorphism]
     public BaseItemFactory factory;
@@ -16,4 +16,8 @@ public class BaseItemConfiguration : IItemConfiguration {
     [Header("数据")]
     [Range(0, 1024), Tooltip("物品的最大堆叠数量")] 
     public uint maxStack = 128;
+
+    public override sealed string GetRegistryType() {
+        return RegisterHelper.ITEM;
+    }
 }

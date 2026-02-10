@@ -1,5 +1,4 @@
-public class BaseBlock : IBlockProduct {
-    public BaseBlock(BaseBlockConfiguration cfg) {
-
+public class BaseBlock : FactoryProduct<BaseBlockConfiguration> {
+    public BaseBlock(BaseBlockConfiguration configuration) : base(configuration) {
     }
 }

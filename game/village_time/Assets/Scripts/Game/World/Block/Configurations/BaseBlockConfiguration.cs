@@ -1,8 +1,10 @@
 using System;
 using UnityEngine;
 
+
+
 [Serializable]
-public class BaseBlockConfiguration : IBlockConfiguration {
+public class BaseBlockConfiguration : FactoryConfiguration {
     [Header("---------- 基本 ----------")]
     [SerializeReference, SerializePolymorphism]
     public BaseBlockFactory factory;
@@ -23,5 +25,7 @@ public class BaseBlockConfiguration : IBlockConfiguration {
     [Tooltip("用来判断该方块是否启用碰撞体")]
     public bool passable = false;
 
-
+    public override sealed string GetRegistryType() {
+        return RegisterHelper.BLOCK;
+    }
 }

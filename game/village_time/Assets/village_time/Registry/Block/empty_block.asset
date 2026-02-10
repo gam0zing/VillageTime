@@ -13,24 +13,23 @@ MonoBehaviour:
   m_Name: empty_block
   m_EditorClassIdentifier: 
   configuration:
-    rid: 9088009498839220228
+    rid: 2194247174913261569
   references:
     version: 2
     RefIds:
-    - rid: 9088009498839220228
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 2194247174913261569
       type: {class: BaseBlockConfiguration, ns: , asm: Assembly-CSharp}
       data:
         factory:
-          rid: 9088009509977980928
+          rid: -2
         nameLang:
-          _key: block_empty_name
-          _value: "\u7A7A\u65B9\u5757"
+          _key: 
+          _value: 
         descriptionLang:
-          _key: block_empty_description
-          _value: "Debug\u4E13\u7528\uFF0C\u4F60\u4E0D\u4F1A\u5728\u6B63\u5E38\u6E38\u620F\u4E2D\u770B\u5230\u5B83"
+          _key: 
+          _value: 
         height: 1
         width: 1
         passable: 0
-    - rid: 9088009509977980928
-      type: {class: BaseBlockFactory, ns: , asm: Assembly-CSharp}
-      data: 

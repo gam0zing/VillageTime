@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.Data;
 using System.IO;
 using UnityEngine;
@@ -7,8 +8,9 @@ using UnityEngine;
 /// IO封装
 /// </summary>
 public static class StorageHelper {
-    public static readonly string BASE_PATH = Path.GetDirectoryName(Application.dataPath);
-    public static readonly string LANG_PATH = FullPath("Assets\\AutoAssets\\Lang\\");
+    public static readonly string BASE_PATH = Path.Combine(Path.GetDirectoryName(Application.dataPath), "Assets\\");
+    public static readonly string LANG_PATH = FullPath("AutoAssets\\Lang\\");
+
     private static string FullPath(string path) {
         return Path.Combine(BASE_PATH, path);
     }
@@ -18,5 +20,9 @@ public static class StorageHelper {
     }
     public static T LoadJson<T>(string path) {
         return JsonConvert.DeserializeObject<T>(path);
+    }
+
+    public static RegistryAsset<IFactoryConfiguration> LoadRegistry(string groupId) {
+        throw new NotImplementedException();
     }
 }

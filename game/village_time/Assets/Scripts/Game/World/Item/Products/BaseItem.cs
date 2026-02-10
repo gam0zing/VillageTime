@@ -1,5 +1,4 @@
-public class BaseItem : IItemProduct {
-    public BaseItem(BaseItemConfiguration cfg) {
-
+public class BaseItem : FactoryProduct<BaseItemConfiguration> {
+    public BaseItem(BaseItemConfiguration configuration) : base(configuration) {
     }
 }

@@ -1,3 +1,6 @@
+using System;
+
+[Obsolete]
 public class RegistryInstance<T> {
     public string Id { get; }
     public T configuration;
