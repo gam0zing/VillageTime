@@ -1,10 +1,13 @@
 public class QueueCfg {
     public readonly string id;
-    public ushort maxThreads;
+    /// <summary>
+    /// 硬上限，当前线程数永远无法超过这个值
+    /// </summary>
+    public readonly ushort maxThreads;
     public ushort maxJoinMs;
     // 需要一些性能监控参数，用来给弹性容量提供支持
 
-    public QueueCfg(string id, ushort maxThreads = 1, ushort maxJoinMs = 100) {
+    private QueueCfg(string id, ushort maxThreads = 1, ushort maxJoinMs = 100) {
         this.id = id;
         this.maxThreads = maxThreads;
         this.maxJoinMs = maxJoinMs;

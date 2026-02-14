@@ -9,7 +9,7 @@ using System.Threading;
 /// </summary>
 public sealed class WorkQueue : IDisposable {
     private readonly ConcurrentQueue<Action> _tasks;
-    private readonly List<Thread> _threads;
+    private readonly SemaphoreSlim _restThreads;
     private readonly SemaphoreSlim _restTasks;
     private readonly ManualResetEventSlim _pauseEvent;
     private volatile bool _disposed;
@@ -20,7 +20,7 @@ public sealed class WorkQueue : IDisposable {
 
     public WorkQueue(QueueCfg cfg) {
         this._tasks = new();
-        this._threads = new();
+        this._restThreads = new(cfg.maxThreads);
         this._restTasks = new(0);
         this._pauseEvent = new(false);
         this._disposed = false;
@@ -37,29 +37,26 @@ public sealed class WorkQueue : IDisposable {
     }
 
     private void ThreadLoop() {
-        try {
-            ThreadMgr.GetInstance().OnThreadCreate();
-            // 拦截并释放刚执行完任务的线程
-            while (!this._disposed) {
-                // 此处暂停
-                this._pauseEvent.Wait();
+        this.OnThreadCreate();
+        // 拦截并释放刚执行完任务的线程
+        while (!this._disposed) {
+            // 此处暂停
+            this._pauseEvent.Wait();
 
-                if (this._disposed) break; // 拦截并释放被解除暂停的线程
+            if (this._disposed) break; // 拦截并释放被解除暂停的线程
 
-                try {
-                    this._restTasks.Wait();
-                } catch (ObjectDisposedException) {
-                    break;
-                }
-
-                if (this._disposed) break; // 拦截并释放等待中的线程
-
-                // 从此处开始新任务被加入，对应数量的Thread被放行，开始接取并执行任务
-                if (this._tasks.TryDequeue(out var task)) task.Invoke();
+            try {
+                this._restTasks.Wait();
+            } catch (ObjectDisposedException) {
+                break;
             }
-        } finally {
-            ThreadMgr.GetInstance().OnThreadDestroy();
+
+            if (this._disposed) break; // 拦截并释放等待中的线程
+
+            // 从此处开始新任务被加入，对应数量的Thread被放行，开始接取并执行任务
+            if (this._tasks.TryDequeue(out var task)) task.Invoke();
         }
+        this.OnThreadDestroy();
     }
 
     public void AddTask(Action task) {
@@ -92,7 +89,7 @@ public sealed class WorkQueue : IDisposable {
 
     /// <summary>
     /// 使用这个方法来安全停止线程池，将立即停止任务接取并等待任务队列处理完毕
-    /// 此时可以将该线程池移出管理器，它将在任务队列清空后自动释放并销毁
+    /// 此时必须将该线程池移出管理器，它将在任务队列清空后自动释放并销毁
     /// </summary>
     public void Dispose() {
         lock (this._disposeLock) {
@@ -100,12 +97,7 @@ public sealed class WorkQueue : IDisposable {
             this._disposed = true;
 
             this._pauseEvent.Set();
-            this._restTasks.Release(this._threads.Count);
-
-            // 等待线程退出
-            foreach (var thread in this._threads) {
-                thread.Join(this._cfg.maxJoinMs);
-            }
+            this._restTasks.Release(this._cfg.maxThreads);
 
             this._pauseEvent.Dispose();
             this._restTasks.Dispose();
@@ -114,9 +106,10 @@ public sealed class WorkQueue : IDisposable {
 
     private readonly object _getThreadCountLock = new object();
 
+    // 调用者：
     public int GetThreadCount() {
         lock (this._getThreadCountLock) {
-            return this._threads.Count();
+            return this._cfg.maxThreads - this._restThreads.CurrentCount;
         }
     }
 
@@ -131,5 +124,21 @@ public sealed class WorkQueue : IDisposable {
         } finally {
             final?.Invoke();
         }
+    }
+
+    // 跨线程操作
+    // 子线程 --> 主线程
+    // 并发：信号量，ThreadMgr尝试出队逻辑
+    private void OnThreadCreate() {
+        this._restThreads.WaitOrThrow(ThreadMgr.THREAD_CREATE_MS, null);
+        ThreadMgr.GetInstance().OnThreadCreate();
+    }
+
+    // 跨线程操作 
+    // 子线程 --> 主线程
+    // 并发：信号量，ThreadMgr尝试出队逻辑
+    private void OnThreadDestroy() {
+        this._restThreads.Release();
+        ThreadMgr.GetInstance().OnThreadDestroy();
     }
 }

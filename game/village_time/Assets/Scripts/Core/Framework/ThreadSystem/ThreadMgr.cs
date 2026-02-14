@@ -16,6 +16,8 @@ public class ThreadMgr {
     }
     #endregion
 
+    public const ushort THREAD_CREATE_MS = 25; // 线程创建信号量最大等待时间
+
     private readonly Dictionary<string, WorkQueue> _queues;
 
     public readonly int maxThreads;
@@ -70,7 +72,7 @@ public class ThreadMgr {
     /// 仅应该被线程调用
     /// </summary>
     public void OnThreadCreate() {
-        this.restThreads.Wait();
+        this.restThreads.WaitOrThrow(ms: THREAD_CREATE_MS, null);
         // 进行下一次出队检查
     }
 
