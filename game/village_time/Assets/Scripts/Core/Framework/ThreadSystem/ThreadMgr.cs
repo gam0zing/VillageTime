@@ -1,86 +1,66 @@
-using System;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
-using Unity.IO.LowLevel.Unsafe;
-using UnityEngine;
-
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 public class ThreadMgr {
-    // 创建所有WorkQueue，提供Id
-    // 提供安全的调度接口
-    // 提供需求绑定的WorkQueue Id查询服务
+
     #region 单例
     private static ThreadMgr _instance = new ThreadMgr();
-    public static ThreadMgr GetInstance() {
-        return _instance;
-    }
+    public static ThreadMgr Instance => _instance;
     #endregion
 
-    public const ushort THREAD_CREATE_MS = 25; // 线程创建信号量最大等待时间
-
-    private readonly Dictionary<string, WorkQueue> _queues;
-
-    public readonly int maxThreads;
-    public readonly SemaphoreSlim restThreads;
+    private readonly ConcurrentDictionary<string, WorkQueue> _queues;
 
     private ThreadMgr() {
-        this.maxThreads = Math.Max(Environment.ProcessorCount, 4);
-        this.restThreads = new SemaphoreSlim(this.maxThreads);
+        this._queues = new ConcurrentDictionary<string, WorkQueue>();
     }
 
-    private readonly object _requestLock = new object();
+    private object _requestLock = new object();
     /// <summary>
-    /// 申请新的线程池，加锁方法<br/>
-    /// 需要带着Id来申请，成功后这个Id将对应一个池对象<br/>
-    /// 每个池创建后默认开辟一个初始线程<br/>
+    /// 申请一个新的线程池，只管线程池名字有没有被占用，别的不管
     /// </summary>
-    /// <param name="queueId">新池的Id</param>
-    /// <param name="agrs"> 池参数，新建成功后该参数将直接被池对象引用，路由API运行时有权修改自己申请的池参数</param>
-    /// <returns></returns>
-    public bool RequestQueue(string queueId, QueueCfg cfg) {
+    /// <param name="name">指定线程池名称，全局唯一</param>
+    /// <returns>true-申请成功，false-申请失败</returns>
+    public bool Request(QueueCfg cfg, ushort initCount) {
+        if (this._queues.ContainsKey(cfg.id)) return false;
+        lock (this._requestLock) {
+            if (this._queues.ContainsKey(cfg.id)) return false;
 
-        if (!this.restThreads.Wait(0)) {
-            UnityEngine.Debug.LogWarning("线程数量达到上限，无法再申请新的线程池");
-            return false;
-        }
-        if (this._queues.ContainsKey(queueId)) {
-            UnityEngine.Debug.LogWarning("正在用重复的Id申请线程池！已驳回");
-            this.restThreads.Release();
-            return false;
-        }
-        this._queues[queueId] = new WorkQueue(cfg);
-        return true;
-    }
-
-
-    private readonly object _giveBackLock = new object();
-    /// <summary>
-    /// 释放线程池，归还线程
-    /// </summary>
-    public void GiveBackQueue(string queueId) {
-        lock (this._giveBackLock) {
-            if (!this._queues.ContainsKey(queueId)) {
-                UnityEngine.Debug.LogWarning("要释放的线程池不存在！");
-                return;
-            }
-            this._queues[queueId].Dispose();
-            this._queues.Remove(queueId);
+            this._queues[cfg.id] = new WorkQueue(cfg, initCount);
+            return true;
         }
     }
 
     /// <summary>
-    /// 仅应该被线程调用
+    /// 业务层调用的跨线程通信入口，模拟事件循环模式，实现本地线程的异步调用
     /// </summary>
-    public void OnThreadCreate() {
-        this.restThreads.WaitOrThrow(ms: THREAD_CREATE_MS, null);
-        // 进行下一次出队检查
+    /// <typeparam name="TResult">回调需要的返回值</typeparam>
+    /// <param name="targeQueue">目标队列Id</param>
+    /// <param name="task">提交的任务</param>
+    /// <param name="then">任务完成后的回调</param>
+    public void AwaitPromise<TResult>(string targeQueue, Func<TResult> task, Action<TResult> then) {
+        if (!this._queues.TryGetValue(targeQueue, out var queue)) {
+            Console.WriteLine("指定的线程池Id不存在");
+            return;
+        }
+        string thisQueue = ThreadAPI.data.queueId;
+        Action action = () => {
+            TResult result = task.Invoke();
+            ThreadAPI.data.Submit(thisQueue, () => then.Invoke(result));
+        };
+        ThreadAPI.data.Submit(targeQueue, action);
     }
 
     /// <summary>
-    /// 仅应该被线程调用
+    /// 内部跨线程提交入口，业务不要用
     /// </summary>
-    public void OnThreadDestroy() {
-        this.restThreads.Release();
-        // 进行出队检查
+    /// <param name="queueId">队列Id</param>
+    /// <param name="task">任务</param>
+    public void Enqueue(string queueId, Action task) {
+        if (this._queues.TryGetValue((queueId), out var queue)) {
+            queue.Enqueue(task);
+        }
     }
 }
